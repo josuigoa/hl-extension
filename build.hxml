@@ -1,0 +1,3 @@
+-cp hlibLib
+-main Main
+-hl out/main.c
