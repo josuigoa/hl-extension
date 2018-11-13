@@ -1,7 +1,6 @@
 #define HL_NAME(n) hlib_##n
 
 #include <hl.h>
-#include <string.h>
 
 typedef struct _result hlib_result;
 
@@ -21,11 +20,10 @@ HL_PRIM vbyte *HL_NAME(hello_name)( vbyte* name ) {
 
 HL_PRIM hlib_result *HL_NAME(request_result)( vbyte* name, int birthYear, int currentYear ) {
 	
-	hlib_result *cr;
-	cr = (hlib_result*)hl_gc_alloc_finalizer(sizeof(hlib_result));
+	hlib_result *cr = (hlib_result*)hl_gc_alloc_finalizer(sizeof(hlib_result));
 	
 	cr->name = HL_NAME(hello_name)(name);
-	cr->age = currentYear + birthYear;
+	cr->age = currentYear - birthYear;
 	
 	return cr;
 }
@@ -45,11 +43,8 @@ HL_PRIM int HL_NAME(result_age)( hlib_result* cr) {
 #define _RESULT _ABSTRACT( hlib_result )
 
 
-DEFINE_PRIM(_NULL(_BYTES), 	hello_name, 		_BYTES);
-
-DEFINE_PRIM(_RESULT,     	request_result, 	_BYTES _I32 _I32);
-
-DEFINE_PRIM(_RESULT,     	get_haxe_object, 	_BYTES _I32 _I32);
-
-DEFINE_PRIM(_NULL(_BYTES), 	result_name, 		_RESULT);
-DEFINE_PRIM(_I32, 			result_age, 		_RESULT);
+DEFINE_PRIM(_BYTES, 	hello_name, 		_BYTES);
+DEFINE_PRIM(_RESULT,   	request_result, 	_BYTES _I32 _I32);
+DEFINE_PRIM(_DYN,   	get_haxe_object, 	_BYTES _I32 _I32);
+DEFINE_PRIM(_BYTES, 	result_name, 		_RESULT);
+DEFINE_PRIM(_I32, 		result_age, 		_RESULT);

@@ -17,10 +17,7 @@ typedef Point = { x : Int, y : Int };
 
 */
 
-
-abstract Dyn<T>(Dynamic) from T to T {
-	
-}
+abstract Dyn<T>(Dynamic) from T to T {}
 
 typedef HLibResult = {
 	var name:String;
@@ -33,7 +30,7 @@ private class CLib
 {
 	public static function helloName( name:hl.Bytes ) : Null<hl.Bytes> { return null; }
 	public static function requestResult( name:hl.Bytes, birthYear:Int, currentYear:Int ) : HLibResultHandler { return null; }
-	public static function getHaxeObject( name:hl.Bytes, birthYear:Int, currentYear:Int ) : HLibResult { return null; }
+	public static function getHaxeObject( name:hl.Bytes, birthYear:Int, currentYear:Int ) : Dyn<HLibResult> { return null; }
 	public static function resultName( result:HLibResultHandler ) : Null<hl.Bytes> { return null; }
 	public static function resultAge( result:HLibResultHandler ) : Int { return 0; }
 }
@@ -46,7 +43,7 @@ class HLib {
 	public function new() {}
 	
 	static public function helloName( name : String ) {
-		var bytes = CLib.helloName(name.toUtf8());
+		var bytes = CLib.helloName(name.bytes);
 		
 		if ( bytes == null )
 			return null;
@@ -59,9 +56,7 @@ class HLib {
 	}
 	
 	static public function requestResult( name : String, birthYear : Int, currentYear : Int ) {
-		result = CLib.requestResult(name.toUtf8(), birthYear, currentYear);
-		
-		trace('returned resutl: $result');
+		result = CLib.requestResult(name.bytes, birthYear, currentYear);
 	}
 	
 	static public function getName() {
@@ -76,8 +71,14 @@ class HLib {
 		return CLib.resultAge(result);
 	}
 	
-	static public function getHaxeObject( name : String, birthYear : Int, currentYear : Int ) : Dyn<HLibResult> {
-		return CLib.getHaxeObject(name.toUtf8(), birthYear, currentYear);
+	static public function getHaxeObject( name : String, birthYear : Int, currentYear : Int ) : HLibResult {
+		// Segmentation fault 11
+		// this error raises when casting occurs
+		return CLib.getHaxeObject(name.bytes, birthYear, currentYear);
+
+		// requestResult(name, birthYear, currentYear);
+		// var res:HLibResult = {name : getName(), age : getAge()};
+		// return res;
 	}
 	
 }

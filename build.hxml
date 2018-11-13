@@ -1,3 +1,4 @@
 -cp hlibLib
 -main Main
--hl out/main.c
+# -hl out/main.c
+-hl main.hl
