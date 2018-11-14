@@ -36,12 +36,12 @@ HL_PRIM hlib_result *HL_NAME(get_haxe_object)( vbyte* name, int birthYear, int c
 	// set field called "age" of 'obj' object of type 'int' with the cr->age value
 	hl_dyn_seti(obj, hl_to_utf16("age"), int, cr->age);
 	// hl_dyn_seti(obj, hl_to_utf16("age"), HI32, cr->age);
-	// hl_dyn_seti(obj, hl_to_utf16("age"), hlt_i32, cr->age);
+	// hl_dyn_seti(obj, hl_to_utf16("age"), &hlt_i32, cr->age);
 	
 	// set field called "name" of 'obj' object of type 'vbyte' with the cr->name value
 	hl_dyn_setp(obj, hl_to_utf16("name"), vbyte, cr->name);
 	// hl_dyn_setp(obj, hl_to_utf16("name"), HBYTES, cr->name);
-	// hl_dyn_setp(obj, hl_to_utf16("name"), hlt_bytes, cr->name);
+	// hl_dyn_setp(obj, hl_to_utf16("name"), &hlt_bytes, cr->name);
 	
 	return obj;
 }
