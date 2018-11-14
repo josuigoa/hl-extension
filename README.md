@@ -14,7 +14,6 @@ struct _result {
 
 * HLib.getName(): Get the name from C struct. To call this method it's necessary to call HLib.requestResult first.
 * HLib.getAge(): Get the age from C struct. To call this method it's necessary to call HLib.requestResult first.
-* **WIP** HLib.getHaxeObject(name:String, birthYear:Int, currentYear:Int): returns a Haxe object instead of a pointer to C side.
 
 ## Compiling HDLL file
 
