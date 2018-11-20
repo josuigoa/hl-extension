@@ -1,4 +1,4 @@
--cp hlibLib
+-cp hlextLib
 -main Main
 # -hl out/main.c
 -hl main.hl
