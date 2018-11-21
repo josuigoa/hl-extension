@@ -2,7 +2,7 @@
 
 This library is created to learn how the bridge between Haxe and C works. It only has few functions:
 
-* HLExt.requestResult(name:String, birthYear:Int, currentYear:Int): Creates an `struct` in C side with given arguments
+* HLExt.new(name:String, birthYear:Int, currentYear:Int): Creates an `struct` in C side with given arguments, returns that struct and we save it in the Haxe side.
 
 ```c
 struct _result {
@@ -11,9 +11,9 @@ struct _result {
 };
 ```
 
-* HLExt.getGreeting(): Get the name from C struct. To call this method it's necessary to call HLExt.requestResult first.
-* HLExt.getAge(): Get the age from C struct. To call this method it's necessary to call HLExt.requestResult first.
-* **WIP** HLExt.getHaxeObject(name:String, birthYear:Int, currentYear:Int): returns a Haxe object instead of a pointer to C side.
+* HLExt.getGreeting(): Get the name from C struct.
+* HLExt.getAge(): Get the age from C struct.
+* static HLExt.getHaxeObject(name:String, birthYear:Int, currentYear:Int): returns a Haxe object instead of a pointer to C side.
 
 ## Compiling HDLL file
 
