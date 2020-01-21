@@ -19,7 +19,8 @@ struct _result {
 
 To create the *.hdll file execute this command:
 
-`gcc -O3 -shared -o hlext.hdll -std=c11 hlextLib/hlext.c -I/usr/local/include -lhl`
+`cd hlextLib`
+`gcc -O3 -shared -o hlext.hdll -std=c11 hlext.c -I/usr/local/include -lhl -fPIC`
 
 * **gcc**: compiler call
 * **-O3**: level 3 optimization
@@ -28,7 +29,8 @@ To create the *.hdll file execute this command:
 * **-std=standard**: C language standard
 * **hlextLib/hlext.c**: C file to compile
 * **-Idirectory**: Include the directory where headers files are. In this case only `hl.h` is needed
-* **-llib**: Use `lib` library
+* **-lname**: Use `libname` library
+* **-fPIC**: Position Independent Code
 
 Once we create the `hlext.hdll` file, move it where the other *.hdll files are. In may case they are at `/usr/local/lib`
 
@@ -41,5 +43,5 @@ See `Main.hx`.
 ## TODO
 
 * Try compiling with HLC.
-* Try on Win / Linux.
+* Try on Win.
 * Add a callback to C side and then call to Haxe from C.
