@@ -19,7 +19,7 @@ struct _result {
 
 To create the *.hdll file execute this command:
 
-`gcc -O3 -shared -o hlext.hdll -std=c11 hlextLib/hlext.c -I/usr/local/include -lhl`
+`gcc -O3 -shared -o hlext.hdll -std=c11 hlext.c -I/usr/local/include -lhl`
 
 * **gcc**: compiler call
 * **-O3**: level 3 optimization

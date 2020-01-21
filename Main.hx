@@ -16,5 +16,6 @@ class Main {
         trace('Result managed in Haxe side / greeting: ' + result.greeting);
         trace('Result managed in Haxe side / age: ' + result.age);
         
+        inst.requestAsyncValue(s -> trace('async return: $s'), 5);
     }
 }

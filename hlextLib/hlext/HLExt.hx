@@ -30,6 +30,7 @@ private class CLib
 	public static function requestResult( name:hl.Bytes, birthYear:Int, currentYear:Int ) : HLExtResultHandler { return null; }
 	public static function resultGreeting( result:HLExtResultHandler ) : Null<hl.Bytes> { return null; }
 	public static function resultAge( result:HLExtResultHandler ) : Int { return 0; }
+	public static function requestAsyncValue ( cb:String->Void, seconds:Int ) : Void { };
 	public static function getHaxeObject( name:hl.Bytes, birthYear:Int, currentYear:Int ) : Dyn<{greeting:hl.Bytes, age:Int}> { return null; }
 }
 
@@ -51,6 +52,10 @@ class HLExt {
 		if (result == null) return 0;
 		
 		return CLib.resultAge(result);
+	}
+	
+	public function requestAsyncValue( callback : String->Void, seconds : Int ) {
+		CLib.requestAsyncValue(callback, 5);
 	}
 	
 	static public function getHaxeObject( name : HString, birthYear : Int, currentYear : Int ) : HLExtResult {
