@@ -1,0 +1,9 @@
+all: hlext.dll
+
+hlext.dll: hlext.obj
+	cl /LD /MD hlext.obj "$(HASHLINK_BIN)\libhl.lib"
+
+hlext.obj: hlext.c
+	cl /c /MD hlext.c /I . /I $(HASHLINK)
+
+.PHONY: all

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  linux:
+    build:
+      context: .
+      dockerfile: Dockerfile.linux
+    volumes: 
+      - .:/usr/local/share/host
+  win:
+    build:
+      context: .
+      dockerfile: Dockerfile.win
+    volumes: 
+      - .:c:\host

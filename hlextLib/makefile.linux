@@ -1,0 +1,2 @@
+hlext.hdll: hlext.c
+	gcc -o hlext.hdll hlext.c -shared -Wall -O3 -I. -std=c11 -fPIC -I/usr/local/include -lhl

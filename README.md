@@ -17,10 +17,27 @@ struct _result {
 
 ## Compiling HDLL file
 
+There are two Docker images (Windows and Linux) with the tools required for the compilation. Run the docker container for the desired OS and attach to it;
+
+* ```docker-compose up --build linux``` -> Attach to the container ```docker run -it [container_id] /bin/sh```
+* ```docker-compose up --build win``` -> Attach to the container ```docker run -it [container_id] powershell```
+
+Go to the ```makefile.*``` path and execute:
+
+* linux | mac: ```make -f makefile.[linux|mac]```
+  * move the newly created  ```hlext.hdll``` to the path where ```libhl.so``` is, usualy ```/usr/local/lib```
+* win: ```nmake -f makefile.win```
+  * rename ```hlext.dll``` to ```hlext.hdll``` and move it to the path where ```libhl.lib``` is.
+
 To create the *.hdll file execute this command:
 
-`cd hlextLib`
-`gcc -O3 -shared -o hlext.hdll -std=c11 hlext.c -I/usr/local/include -lhl -fPIC`
+## Commands breakdown
+
+### Linux and mac
+
+```shell
+gcc -O3 -shared -o hlext.hdll -std=c11 hlext.c -I/usr/local/include -lhl
+```
 
 * **gcc**: compiler call
 * **-O3**: level 3 optimization
@@ -32,9 +49,9 @@ To create the *.hdll file execute this command:
 * **-lname**: Use `libname` library
 * **-fPIC**: Position Independent Code
 
-Once we create the `hlext.hdll` file, move it where the other *.hdll files are. In may case they are at `/usr/local/lib`
+### Windows
 
-`mv hlext.hdll /usr/local/lib`
+TODO
 
 ## Usage
 
@@ -43,5 +60,4 @@ See `Main.hx`.
 ## TODO
 
 * Try compiling with HLC.
-* Try on Win.
 * Add a callback to C side and then call to Haxe from C.
