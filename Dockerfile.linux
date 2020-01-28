@@ -15,7 +15,6 @@ RUN set -ex \
         libsdl2-dev \
         libmbedtls-dev \
         libuv1-dev \
-        libbluetooth-dev \
 	' \
 	&& apt-get update && apt-get install -y $hlBuildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* \
 	\
@@ -29,21 +28,5 @@ RUN set -ex \
     && cp /usr/local/lib/libhl.so /usr/lib/ \
     && rm -r /usr/src/hl
     # && apt-get purge -y --auto-remove $hlBuildDeps \
-
-
-# PSMOVEAPI
-ENV PSMOVEAPI_VERSION 4.0.8
-RUN set -ex \
-	&& wget -O psmoveapi.tar.gz "https://github.com/thp/psmoveapi/releases/download/4.0.8/psmoveapi-4.0.8-linux.tar.gz" \
-    && mkdir -p /usr/src/psmoveapi \
-	&& tar -xC /usr/src/psmoveapi --strip-components=1 -f psmoveapi.tar.gz \
-    && rm psmoveapi.tar.gz \
-    && mkdir -p /usr/local/share/host/native/psmoveapi/include \
-    && mkdir -p /usr/local/share/host/native/lib \
-	&& cp -R /usr/src/psmoveapi/include /usr/local/share/host/native/psmoveapi/include \
-    && cp /usr/src/psmoveapi/lib/* /usr/local/share/host/native/lib/ \
-    && rm -r /usr/src/psmoveapi \
-    && haxelib git ammer https://github.com/Aurel300/ammer.git
-
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
