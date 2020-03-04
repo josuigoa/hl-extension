@@ -29,8 +29,6 @@ Go to the ```makefile.*``` path and execute:
 * win: ```nmake -f makefile.win```
   * rename ```hlext.dll``` to ```hlext.hdll``` and move it to the path where ```libhl.lib``` is.
 
-To create the *.hdll file execute this command:
-
 ## Commands breakdown
 
 ### Linux and mac
