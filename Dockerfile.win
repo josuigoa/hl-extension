@@ -4,16 +4,9 @@ SHELL ["powershell", "-command"]
 
 ENV HASHLINK_BIN C:\\hashlink
 ENV HASHLINK C:\\hashlink\\include
-ENV CMAKE C:\\Program Files\\CMake\\bin
-ENV CL_EXE_PATH C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin
-
-ENV MSVC_PATH C:\\Program Files (x86)\\MSBuild\\14.0\\bin;C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\BIN;C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319;C:\\Windows\\Microsoft.NET\\Framework\\;C:\\Program Files (x86)\\Windows Kits\\8.1\\bin\\x86;C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin;C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Users\\ContainerAdministrator\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Program Files (x86)\\Windows Kits\\8.1\\Windows Performance Toolkit\\;
-ENV MSVC_INCLUDE C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\INCLUDE;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10240.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\8.1\\include\\shared;C:\\Program Files (x86)\\Windows Kits\\8.1\\include\\um;C:\\Program Files (x86)\\Windows Kits\\8.1\\include\\winrt;
-ENV MSVC_LIB C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\LIB;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.10240.0\\ucrt\\x86;C:\\Program Files (x86)\\Windows Kits\\8.1\\lib\\winv6.3\\um\\x86;
-ENV MSVC_LIBPATH C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\LIB;C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319;C:\\Windows\\Microsoft.NET\\Framework\\;References\\CommonConfiguration\\Neutral;\\Microsoft.VCLibs\\14.0\\References\\CommonConfiguration\\neutral;
 
 # PATH isn't actually set in the Docker image, so we have to set it from within the container
-RUN $newPath = ('{0};{1};{2};{3};{4};{5}' -f $env:HASHLINK_BIN, $env:HASHLINK, $env:CMAKE, $env:CL_EXE_PATH, $env:MSVC_PATH, $env:PATH); \
+RUN $newPath = ('{0};{1};{2};' -f $env:HASHLINK_BIN, $env:HASHLINK, $env:PATH); \
 	Write-Host ('Updating PATH: {0}' -f $newPath); \
 	[Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Machine); \
 	$newInclude = ('{0}' -f $env:MSVC_INCLUDE); \
@@ -27,9 +20,23 @@ RUN $newPath = ('{0};{1};{2};{3};{4};{5}' -f $env:HASHLINK_BIN, $env:HASHLINK, $
 	[Environment]::SetEnvironmentVariable('LIBPATH', $newLibPath, [EnvironmentVariableTarget]::Machine);
 # doing this first to share cache across versions more aggressively
 
+RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
+RUN choco install vcbuildtools -y
+RUN refreshenv
+
+RUN Write-Host 'Configuring environment'; \
+	pushd 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC' ; \
+	cmd /c 'vcvarsall.bat amd64&set' | foreach { \
+    if ($_ -match '=') { \
+      $v = $_.split('='); \
+      [Environment]::SetEnvironmentVariable($v[0], $v[1], [EnvironmentVariableTarget]::Machine); \
+    } \
+  } ; \
+	popd
+
 # install hashlink
 ENV HL_VERSION 1.10
-RUN $url = 'https://github.com/HaxeFoundation/hashlink/releases/download/1.10/hl-1.10.0-win.zip'; \
+RUN $url = 'https://github.com/HaxeFoundation/hashlink/releases/download/1.11/hl-1.11.0-win.zip'; \
 	Write-Host ('Downloading {0} ...' -f $url); \
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
 	Invoke-WebRequest -Uri $url -OutFile hashlink.zip; \
@@ -47,10 +54,5 @@ RUN $url = 'https://github.com/HaxeFoundation/hashlink/releases/download/1.10/hl
 	Write-Host '  hl'; hl; \
 	\
 	Write-Host 'Complete.';
-
-RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
-RUN choco install vcbuildtools -y
-# c:/Program Files (x86)/Microsoft Visual C++ Build Tools/vcbuildtools.bat
-RUN refreshenv
 
 CMD ["ping", "-t", "127.0.0.1"]
