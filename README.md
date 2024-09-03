@@ -17,6 +17,8 @@ struct _result {
 
 ## Compiling HDLL file
 
+### With Docker
+
 There are two Docker images (Windows and Linux) with the tools required for the compilation. Run the docker container for the desired OS and attach to it;
 
 * ```docker-compose up --build linux``` -> Attach to the container ```docker run -it [container_id] /bin/sh```
@@ -28,6 +30,24 @@ Go to the ```makefile.*``` path and execute:
   * move the newly created  ```hlext.hdll``` to the path where ```libhl.so``` is, usualy ```/usr/local/lib```
 * win: ```nmake -f makefile.win```
   * rename ```hlext.dll``` to ```hlext.hdll``` and move it to the path where ```libhl.lib``` is.
+
+### With MSYS2 on Windows
+
+With MSYS2 UCRT64 on Windows and with Hashlink installed in /c/HaxeToolkit/hl-1.11.0-win, from project's root:
+
+```sh
+cd hlextLib
+gcc -O2 -shared -o hlext.hdll -std=c11 hlext.c -I/c/HaxeToolkit/hl-1.11.0-win/include -L /c/HaxeToolkit/hl-1.11.0-win/ -lhl -llibhl
+```
+
+Move ```hlext.hdll``` to the path where ```libhl.lib``` is.
+
+Now from your IDE at project's root:
+
+```sh
+haxe .\build.hxml
+hl .\main.hl
+```
 
 ## Commands breakdown
 
